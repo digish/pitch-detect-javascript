@@ -1,0 +1,55 @@
+Pitch Detect Module Usage
+
+  it is a three step process
+  step 1) initialize pitch detector 
+  step 2) setup timer1 --> push data buffers to pitch detector
+  step 3) setup timer2 --> compute pitch on existing buffers.
+
+Step1 : Initialize or configure module
+---------------------------------------
+    /* selecting input data sample rate */
+    pd.config("samplerate",11025);
+
+    /* set silence threshold for input sample */
+    pd.config("threshold" ,0.1);
+
+    /* Select window size for processing samples */
+	  pd.config("window_size",512);
+
+
+Step2: push input data samples at regular interval
+---------------------------------------------------
+   /*  if you have audio samples in text string with ; seperated 
+    * 
+    *  Example txt = "1.3223; 3.332;   ..    ;-0.323"
+    *  
+    */
+   
+   pd.in_data_txt(Txt);
+
+    OR
+
+   /*  if you have audio samples in number array string with ; seperated 
+    * 
+    *  Example Num = [1.3223, 3.332,   ..    ,-2.323]
+    *  
+    */
+   
+   pd.in_data_num(Num);
+
+Step3: Call compute routine to perform pitch detection on pushed data at regular interval
+----------------------------------------------
+
+    result = pd.compute_pitch();    
+	
+	/* result = 
+    {
+      valid,          // validity flag of result 
+      pitch,          // array of pitches detected in current input frame [p1,p2,p3,...]
+      correlation,    // computed correlation on input frame [[index1,val1],..]
+      peaks,          // computed peaks values in correlation frame [[index1,val1],...]
+      matching_peaks, // valid peaks for calculatig pitch [[index1,val1],...]
+    };
+	
+    */
+
